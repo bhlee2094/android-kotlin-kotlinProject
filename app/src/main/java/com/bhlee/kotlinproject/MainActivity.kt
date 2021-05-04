@@ -1,30 +1,63 @@
 package com.bhlee.kotlinproject
 
+import android.annotation.SuppressLint
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_main.*
 
-
+@SuppressLint("StaticFieldLeak")
 class MainActivity : AppCompatActivity() {
 
+    lateinit var db : UserProfileDatabase
+    var UserProfileList = listOf<UserProfile>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var fireMonster1 = FireMonster("불씨", 1, 5);
-        var waterMonster1 = WaterMonster("방울", 1, 5);
-        var windMonster1 = WindMonster("살랑", 1, 5);
+        db = UserProfileDatabase.getInstance(this)!!
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar) // 상단 toolbar
-        setSupportActionBar(toolbar)
-        val actionbar = supportActionBar!!
-        actionbar.setDisplayShowTitleEnabled(false)
+        button.setOnClickListener {
+            val user = UserProfile(null,editText.text.toString())
+            insertData(user)
+        }
+    }
 
-        var mainTextView = findViewById<TextView>(R.id.MainTextView)
-        mainTextView.setText("몬스터 이름: " + fireMonster1.name + ", 몬스터 공격력: " + fireMonster1.damage + ", 몬스터 체력: " + fireMonster1.health + "\n")
-        mainTextView.append("몬스터 이름: " + waterMonster1.name + ", 몬스터 공격력: " + waterMonster1.damage + ", 몬스터 체력: " + waterMonster1.health + "\n")
-        mainTextView.append("몬스터 이름: " + windMonster1.name + ", 몬스터 공격력: " + windMonster1.damage + ", 몬스터 체력: " + windMonster1.health + "\n")
+    fun insertData(user : UserProfile){
+        val insertTask = object : AsyncTask<Unit, Unit, Unit>(){
+            override fun doInBackground(vararg params: Unit?) {
+                db.getUserProfileDao().insert(user)
+            }
+
+            override fun onPostExecute(result: Unit?) {
+                super.onPostExecute(result)
+                getAllDatas()
+            }
+        }
+        insertTask.execute()
+    }
+
+
+    fun getAllDatas(){
+        val getTask = object : AsyncTask<Unit, Unit, Unit>(){
+            override fun doInBackground(vararg params: Unit?) {
+                UserProfileList = db.getUserProfileDao().getAll()
+            }
+
+            override fun onPostExecute(result: Unit?) {
+                super.onPostExecute(result)
+
+            }
+        }
+        getTask.execute()
+    }
+
+    fun deleteData(){
+
+    }
+
+    fun updateData(){
+
     }
 
 }

@@ -11,14 +11,26 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/violet"
+        android:background="@color/purple_200"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="nickname 입력" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="입력" />
 
     <TextView
         android:id="@+id/MainTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
         android:textColor="#090000"
         android:textSize="18sp" />
 </LinearLayout>
